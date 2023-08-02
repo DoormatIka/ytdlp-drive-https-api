@@ -1,0 +1,23 @@
+{
+  "name": "ytdlp-https-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/mime-types": "^2.1.1",
+    "typescript": "^5.1.6"
+  },
+  "type": "module",
+  "dependencies": {
+    "@googleapis/drive": "^8.0.0",
+    "express": "^4.18.2",
+    "mime-types": "^2.1.35",
+    "youtube-dl-exec": "^2.4.6"
+  }
+}
