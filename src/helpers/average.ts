@@ -17,14 +17,19 @@ export async function measureAverageDownloadSpeed() {
             s: 9.4 * 8,
         }
     ];
+
+    const speeds = [];
     const times = [];
     for (const image of images) {
-        times.push(await measureDownloadSpeed(image.i, image.s));
+        const speed = await measureDownloadSpeed(image.i, image.s);
+        speeds.push(speed.mbits);
+        times.push(speed.seconds);
     }
-    const alt = (times.reduce((prev, curr) => prev + curr)) / times.length
+    const alt = (speeds.reduce((prev, curr) => prev + curr)) / times.length
     return {
         message: `${alt} Mbps`,
-        n: alt
+        n: alt,
+        seconds: times
     };
 }
 
@@ -37,7 +42,10 @@ async function measureDownloadSpeed(image: string, mbits: number) {
 
     const pr = process.hrtime(startTime);
     const elapsedSeconds = parseHrtimeToMS(pr[0], pr[1]);
-    return mbits / elapsedSeconds;
+    return {
+        mbits: mbits / elapsedSeconds,
+        seconds: elapsedSeconds
+    };
 }
 function parseHrtimeToMS(prev: number, curr: number) {
     const seconds = prev + (curr / 1e9);
