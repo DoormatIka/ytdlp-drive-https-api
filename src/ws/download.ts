@@ -18,6 +18,7 @@ export const dlf: WS = (drive, folderID) => {
         f: (ws, req) => {
             ws.on("message", async (data) => {
                 await main(data, drive, folderID ?? "", ws as unknown as WebSocket);
+                ws.terminate();
             })
         }
     }
