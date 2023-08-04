@@ -5,16 +5,16 @@
 export async function measureAverageDownloadSpeed() {
     const images = [
         {
-            i: "https://media.discordapp.net/attachments/1063526734969974907/1136708394913382511/d145e23c485c5113.png",
-            s: 5.2 * 8
+            i: "https://media.discordapp.net/attachments/1063526734969974907/1136912681471856731/Piss_Healerchan_Cleaned_1.png",
+            s: 5.95 * 8
         },
         {
-            i: "https://media.discordapp.net/attachments/1063526734969974907/1136720920526999702/illust_85762705_20230804_020259.jpg",
-            s: 0.7 * 8,
+            i: "https://cdn.discordapp.com/attachments/1063526734969974907/1136918736884998234/98.png",
+            s: 9.8 * 8,
         },
         {
-            i: "https://media.discordapp.net/attachments/1063526734969974907/1136720934481428530/illust_61515810_20230804_020244.png",
-            s: 1.14 * 8,
+            i: "https://cdn.discordapp.com/attachments/1063526734969974907/1136919471165014086/335037376_3429171477401305_962989575239595520_n.png",
+            s: 9.4 * 8,
         }
     ];
     const times = [];
@@ -32,7 +32,8 @@ async function measureDownloadSpeed(image: string, mbits: number) {
     const startTime = process.hrtime();
 
     // a quiet (AFAICT) hack to avoid cache.
-    await fetch(image + "?dummy=" + Date.now(), { cache: "no-store" });
+    const res = await fetch(image + "?dummy=" + Date.now(), { cache: "no-store" });
+    await res.blob()
 
     const pr = process.hrtime(startTime);
     const elapsedSeconds = parseHrtimeToMS(pr[0], pr[1]);
