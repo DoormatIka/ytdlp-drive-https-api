@@ -5,12 +5,12 @@
 export async function measureAverageDownloadSpeed() {
     const images = [
         {
-            i: "https://media.discordapp.net/attachments/1063526734969974907/1136912681471856731/Piss_Healerchan_Cleaned_1.png",
-            s: 5.95 * 8
+            i: "https://cdn.discordapp.com/attachments/1063526734969974907/1136915887857868831/22Fumo.png",
+            s: 21.95 * 8
         },
         {
-            i: "https://cdn.discordapp.com/attachments/1063526734969974907/1136918736884998234/98.png",
-            s: 9.8 * 8,
+            i: "https://cdn.discordapp.com/attachments/1063526734969974907/1136917510822834206/24.png",
+            s: 24.07 * 8,
         },
         {
             i: "https://cdn.discordapp.com/attachments/1063526734969974907/1136919471165014086/335037376_3429171477401305_962989575239595520_n.png",
