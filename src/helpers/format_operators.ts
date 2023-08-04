@@ -1,4 +1,4 @@
-import { FORMAT_TYPE } from "./types/format";
+import { FORMAT_TYPE } from "./format";
 
 export function mergeFormats(...format: (FORMAT_TYPE | string)[]) {
     // equivalent to combining different formats into one
