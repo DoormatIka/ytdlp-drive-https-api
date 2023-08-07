@@ -1,17 +1,21 @@
 import googledrive from "@googleapis/drive";
 import express from "express";
-import expressWs from "express-ws";
-import url from "url";
 import json from "./config.json" assert { type: "json" };
-import { dlf } from "./src/ws/download.js";
+import cors from "cors";
+
 import { listallf } from "./src/http/listall.js";
 import { disableAutoDeletionf, enableAutoDeletionf } from "./src/http/autoDeletion.js";
 import { measuref } from "./src/http/measure.js";
+import { downloadf } from "./src/http/download.js";
+import { uploadf } from "./src/http/upload.js";
+import { infof } from "./src/http/info.js";
+import { checklinkf } from "./src/http/check.js";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; // quite dangerous ay?
-const router = express.Router() as expressWs.Router;
-const { app, getWss, applyTo } = expressWs(express());
+
+const app = express();
 app.use(express.json());
+app.use(cors());
 app.listen(3000, () => {
     console.log("Listening to port 3000.");
 });
@@ -25,14 +29,19 @@ const drive = googledrive.drive({
 });
 
 const listall = listallf(drive, folderID);
-const measure = measuref(drive);
+const measure = measuref(drive, folderID);
 const enableAutoDeletion = enableAutoDeletionf(drive, folderID);
 const disableAutoDeletion = disableAutoDeletionf(drive, folderID);
-const dl = dlf(drive, folderID);
+const download = downloadf(drive, folderID);
+const upload = uploadf(drive, folderID);
+const info = infof(drive, folderID);
+const check = checklinkf(drive);
 
-router.ws(dl.route, dl.f);
-app.use("/download-ws", router);
 app.get(listall.route, listall.f);
 app.get(measure.route, measure.f);
+app.post(check.route, check.f);
+app.post(info.route, info.f);
 app.post(disableAutoDeletion.route, disableAutoDeletion.f);
 app.post(enableAutoDeletion.route, enableAutoDeletion.f);
+app.post(download.route, download.f);
+app.post(upload.route, upload.f);

@@ -1,0 +1,59 @@
+import ytdl from "youtube-dl-exec";
+import path from "path";
+import fetch from "node-fetch";
+import { RequestHandler } from "express";
+import { measureAverageDownloadSpeed } from "../helpers/average.js";
+import { HTTP } from "../type.js";
+import { select } from "../helpers/format_operators.js";
+
+// const average_speed = await measureAverageDownloadSpeed();
+const average_speed = {
+    n: 100
+}
+
+export const infof: HTTP<RequestHandler> = (drive) => {
+    return {
+        route: "/info",
+        f: async (req, res) => {
+            try {
+                const video_info = await getInfo(req.body.link);
+                const mbytes_size = compressedVideoSizeCalculator(video_info.duration, video_info.tbr * 125, video_info.fps, 1)
+                res.send({
+                    file: path.basename(video_info._filename),
+                    uploader: video_info.uploader,
+                    duration: video_info.duration,
+                    size_mbytes: mbytes_size,
+                    size_mbits: mbytes_size * 8,
+                    speed_mbits: average_speed.n,
+                    download_length_seconds: (mbytes_size * 8) / average_speed.n,
+                })
+            } catch (err) {
+                res.send(err);
+            }
+        }
+    }
+}
+
+async function getInfo(link: string, best?: number) {
+    return await ytdl(link, {
+        printJson: true,
+        skipDownload: true,
+        format: select("best", best ?? 1),
+        output: "%(title)s"
+    })
+}
+/**
+ * Returns size in megabytes. This is only used for estimations!
+ * @param duration_in_seconds 
+ * @param average_bits 
+ * @param fps 
+ * @returns 
+ */
+function compressedVideoSizeCalculator(
+    duration_in_seconds: number,
+    average_bits: number,
+    fps: number,
+    adjust: number
+) {
+    return (average_bits * duration_in_seconds * fps) / (8 * 1024 * 1024 * adjust)
+}
