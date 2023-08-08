@@ -10,6 +10,8 @@ import { downloadf } from "./src/http/download.js";
 import { uploadf } from "./src/http/upload.js";
 import { infof } from "./src/http/info.js";
 import { checklinkf } from "./src/http/check.js";
+import { cacheFolderDataSize } from "./src/helpers/drive.js";
+import { statusf } from "./src/http/status.js";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; // quite dangerous ay?
 
@@ -27,18 +29,23 @@ const drive = googledrive.drive({
     version: 'v3',
     auth: oauth2Client
 });
+let drive_size = await cacheFolderDataSize(drive, folderID);
 
+// low priority: lessen cacheFolderDataSize calls by calculating the bytes
+//      uploaded to drive and deleted from drive.
 const listall = listallf(drive, folderID);
 const measure = measuref(drive, folderID);
-const enableAutoDeletion = enableAutoDeletionf(drive, folderID);
+const enableAutoDeletion = enableAutoDeletionf(drive, folderID, drive_size);
 const disableAutoDeletion = disableAutoDeletionf(drive, folderID);
-const download = downloadf(drive, folderID);
-const upload = uploadf(drive, folderID);
+const download = downloadf(drive, folderID, drive_size);
+const upload = uploadf(drive, folderID, drive_size);
 const info = infof(drive, folderID);
 const check = checklinkf(drive);
+const status = statusf(drive, folderID, drive_size);
 
 app.get(listall.route, listall.f);
 app.get(measure.route, measure.f);
+app.get(status.route, status.f);
 app.post(check.route, check.f);
 app.post(info.route, info.f);
 app.post(disableAutoDeletion.route, disableAutoDeletion.f);

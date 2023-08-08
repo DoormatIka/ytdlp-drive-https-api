@@ -38,8 +38,9 @@ async function getInfo(link: string, best?: number) {
     return await ytdl(link, {
         printJson: true,
         skipDownload: true,
-        format: select("best", best ?? 1),
-        output: "%(title)s"
+        output: "%(title)s",
+        addHeader: ['referer:youtube.com', 'user-agent:googlebot'],
+        noCheckCertificates: true,
     })
 }
 /**

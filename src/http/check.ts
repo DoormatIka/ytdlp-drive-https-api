@@ -12,7 +12,7 @@ export const checklinkf: HTTP<RequestHandler> = (drive) => {
         f: async (req, res) => {
             try {
                 const reasons = checkURLifYouTubeVideo(req.body.link);
-                if (!(reasons.length > 0)) {
+                if (reasons.length < 1) {
                     const info = await getInfo(req.body.link);
                     if (info.duration > 7200) {
                         reasons.push("TOO_LONG");
@@ -59,8 +59,9 @@ async function getInfo(link: string) {
     return await ytdl(link, {
         printJson: true,
         skipDownload: true,
-        format: "best",
-        output: "%(title)s"
+        output: "%(title)s",
+        addHeader: ['referer:youtube.com', 'user-agent:googlebot'],
+        noCheckCertificates: true,
     })
 }
 
