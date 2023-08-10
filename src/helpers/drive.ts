@@ -12,6 +12,9 @@ export async function cacheFolderDataSize(drive: googledrive.drive_v3.Drive, fol
         results.push(...(cache.data.files ?? []).map(v => Number(v.size!)));
         nextPageToken = cache.data.nextPageToken ?? "";
     }
+    if (results.length < 2) {
+        return 0;
+    }
     return results.reduce((prev, curr) => prev + curr);
 }
 
