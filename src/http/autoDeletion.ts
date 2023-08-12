@@ -24,6 +24,7 @@ async function deleteOldFiles(
     })
 }
 
+// migrate this into a websocket to enable or disable
 export const enableAutoDeletionf: HTTP<RequestHandler> = (drive, folderID, folderSize) => {
     return {
         route: "/enableAutoDeletion",

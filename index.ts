@@ -29,10 +29,11 @@ const drive = googledrive.drive({
     version: 'v3',
     auth: oauth2Client
 });
+
 let drive_size = await cacheFolderDataSize(drive, folderID);
 
-// low priority: lessen cacheFolderDataSize calls by calculating the bytes
-//      uploaded to drive and deleted from drive.
+// TODO: Make a tracker that tracks every megabyte that the user uses.
+
 const listall = listallf(drive, folderID);
 const measure = measuref(drive, folderID);
 const enableAutoDeletion = enableAutoDeletionf(drive, folderID, drive_size);

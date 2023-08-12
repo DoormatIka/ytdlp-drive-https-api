@@ -8,7 +8,7 @@ import { select } from "../helpers/format_operators.js";
 
 // const average_speed = await measureAverageDownloadSpeed();
 const average_speed = {
-    n: 100
+    n: 100,
 }
 
 export const infof: HTTP<RequestHandler> = (drive) => {
@@ -17,7 +17,11 @@ export const infof: HTTP<RequestHandler> = (drive) => {
         f: async (req, res) => {
             try {
                 const video_info = await getInfo(req.body.link);
-                const mbytes_size = compressedVideoSizeCalculator(video_info.duration, video_info.tbr * 125, video_info.fps, 1)
+                const mbytes_size = compressedVideoSizeCalculator(
+                    video_info.duration, 
+                    video_info.tbr * 100, 
+                    1,
+                )
                 res.send({
                     file: path.basename(video_info._filename),
                     uploader: video_info.uploader,
@@ -34,13 +38,15 @@ export const infof: HTTP<RequestHandler> = (drive) => {
     }
 }
 
-async function getInfo(link: string, best?: number) {
+async function getInfo(link: string) {
     return await ytdl(link, {
         printJson: true,
         skipDownload: true,
         output: "%(title)s",
+        // format: select("best", best ?? 1),
         addHeader: ['referer:youtube.com', 'user-agent:googlebot'],
         noCheckCertificates: true,
+        // verbose: true,
     })
 }
 /**
@@ -53,8 +59,7 @@ async function getInfo(link: string, best?: number) {
 function compressedVideoSizeCalculator(
     duration_in_seconds: number,
     average_bits: number,
-    fps: number,
     adjust: number
 ) {
-    return (average_bits * duration_in_seconds * fps) / (8 * 1024 * 1024 * adjust)
+    return (average_bits * duration_in_seconds) / (8 * 1024 * 1024 * adjust)
 }
