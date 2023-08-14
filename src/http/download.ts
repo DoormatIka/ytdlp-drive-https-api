@@ -18,6 +18,7 @@ export const downloadf: HTTP<RequestHandler> = (drive) => {
                     mimetype: mimetype,
                 });
             } catch (err) {
+                console.log(err);
                 res.send(err)
             }
         }

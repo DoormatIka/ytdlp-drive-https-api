@@ -23,6 +23,7 @@ export const checklinkf: HTTP<RequestHandler> = (drive) => {
                     reasons: reasons
                 })
             } catch (err) {
+                console.log(err);
                 res.send(err);
             }
         }

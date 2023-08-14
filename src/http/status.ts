@@ -20,6 +20,7 @@ export const statusf: HTTP<RequestHandler> = (drive, folderID, folderSize) => {
                     ...info.data.storageQuota
                 });
             } catch (err) {
+                console.log(err);
                 res.send(err);
             }
         }

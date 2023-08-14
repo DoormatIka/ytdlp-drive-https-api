@@ -32,6 +32,7 @@ export const infof: HTTP<RequestHandler> = (drive) => {
                     download_length_seconds: (mbytes_size * 8) / average_speed.n,
                 })
             } catch (err) {
+                console.log(err);
                 res.send(err);
             }
         }
