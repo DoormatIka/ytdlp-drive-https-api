@@ -9,7 +9,7 @@ export const uploadf: HTTP<RequestHandler> = (drive, folderID, folderSize) => {
         f: async (req, res) => {
             try {
                 const stats = statSync(req.body.filename);
-                if (folderSize) {
+                if (folderSize !== undefined) {
                     folderSize += stats.size;
                 } else {
                     unlink(req.body.filename, console.error);
@@ -42,6 +42,7 @@ export const uploadf: HTTP<RequestHandler> = (drive, folderID, folderSize) => {
                     id: response.data.id
                 });
             } catch (err) {
+                console.log(err);
                 res.send(err)
             }
         }
