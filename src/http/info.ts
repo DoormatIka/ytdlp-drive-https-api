@@ -44,10 +44,8 @@ async function getInfo(link: string) {
         printJson: true,
         skipDownload: true,
         output: "%(title)s",
-        // format: select("best", best ?? 1),
         addHeader: ['referer:youtube.com', 'user-agent:googlebot'],
         noCheckCertificates: true,
-        // verbose: true,
     })
 }
 /**
