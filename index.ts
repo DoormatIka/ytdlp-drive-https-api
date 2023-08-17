@@ -10,6 +10,7 @@ import { downloadf } from "./src/http/download.js";
 import { uploadf } from "./src/http/upload.js";
 import { infof } from "./src/http/info.js";
 import { checklinkf } from "./src/http/check.js";
+import { formatf } from "./src/http/format.js";
 import { cacheFolderDataSize } from "./src/helpers/drive.js";
 import { statusf } from "./src/http/status.js";
 
@@ -43,6 +44,7 @@ const upload = uploadf(drive, folderID, drive_size);
 const info = infof(drive, folderID);
 const check = checklinkf(drive);
 const status = statusf(drive, folderID, drive_size);
+const format = formatf(drive);
 
 app.get(listall.route, listall.f);
 app.get(measure.route, measure.f);
@@ -53,3 +55,4 @@ app.post(disableAutoDeletion.route, disableAutoDeletion.f);
 app.post(enableAutoDeletion.route, enableAutoDeletion.f);
 app.post(download.route, download.f);
 app.post(upload.route, upload.f);
+app.post(format.route, format.f);

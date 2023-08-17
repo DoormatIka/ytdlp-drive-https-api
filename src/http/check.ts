@@ -4,7 +4,7 @@ import ytdl from "youtube-dl-exec";
 import { RequestHandler } from "express";
 import { HTTP } from "../type.js";
 
-type CheckResult = "NO_LINK" | "NO_PATH_NAME" | "NOT_YOUTUBE" | "NOT_VIDEO" | "TOO_LONG";
+type CheckResult = "NO_LINK" | "NO_PATH_NAME" | "NOT_YOUTUBE" | "NOT_VIDEO" | "TOO_LONG" | "INVALID_FORMAT_ID";
 
 export const checklinkf: HTTP<RequestHandler> = (drive) => {
     return {
@@ -17,13 +17,19 @@ export const checklinkf: HTTP<RequestHandler> = (drive) => {
                     if (info.duration > 7200) {
                         reasons.push("TOO_LONG");
                     }
+                    if (req.body.format_id) {
+                        const format = info.formats.filter(v => v.format_id === req.body.format_id)[0];
+                        if (format === undefined) {
+                            reasons.push("INVALID_FORMAT_ID");
+                        }
+                    }
                 }
                 // await checkForRedirects(req.body.link);
                 res.send({
                     reasons: reasons
                 })
             } catch (err) {
-                console.log(err);
+                // console.log(err);
                 res.send(err);
             }
         }

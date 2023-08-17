@@ -7,11 +7,21 @@ import { RequestHandler } from "express";
 import { HTTP } from "../type.js";
 
 export const downloadf: HTTP<RequestHandler> = (drive) => {
+    /*
+    Fields needed:
+        {
+            link:      string,
+            format_id: string,
+        }
+    */
     return {
         route: "/download",
         f: async (req, res) => {
             try {
-                const { yt_info, mimetype } = await downloadVideo(req.body.link, req.body.best ?? 1);
+                const { yt_info, mimetype } = await downloadVideo(
+                    req.body.link,
+                    req.body.format_id,
+                );
                 res.send({
                     filename: yt_info._filename,
                     name: path.basename(yt_info._filename),
@@ -27,12 +37,12 @@ export const downloadf: HTTP<RequestHandler> = (drive) => {
 
 async function downloadVideo(
     link: string,
-    best: number,
+    format_id?: string
 ) {
     const yt_info = await ytdl(link, {
         retries: 3,
         printJson: true,
-        format: select("best", best),
+        format: format_id,
         output: `media/%(uploader|No Uploader)s - %(title)s${uuid.generate()}.%(ext)s`,
         addHeader: [
             "referer:youtube.com",
