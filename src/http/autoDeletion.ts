@@ -31,7 +31,11 @@ export const enableAutoDeletionf: HTTP<RequestHandler> = (drive, folderID, folde
         f: async (req, res) => {
             const minutes = req.body.minutes * 60 * 1000 ?? 60 * 60 * 1000;
             interval = setInterval(() => {
-                deleteOldFiles(drive, minutes, folderID ?? "", folderSize ?? 0);
+                try {
+                    deleteOldFiles(drive, minutes, folderID ?? "", folderSize ?? 0);
+                } catch (err) {
+                    console.log(err);
+                }
             }, Math.floor(minutes / 2));
             res.send(`Enabled auto deletion for ${minutes}ms.`);
         }
