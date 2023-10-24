@@ -46,6 +46,7 @@ const check = checklinkf(drive);
 const status = statusf(drive, folderID, drive_size);
 const format = formatf(drive);
 
+app.get("/ping", (req, res) => { res.send(true) });
 app.get(listall.route, listall.f);
 app.get(measure.route, measure.f);
 app.get(status.route, status.f);
